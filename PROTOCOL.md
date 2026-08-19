@@ -218,7 +218,7 @@ name: loop-<slug>
 loop-id: LOOP-XX
 description: <one line>
 domain: <domain>
-risk-class: read-only | branch-mutating | infra-touching
+risk-class: read-only | read-only→branch | branch-mutating | infra-touching
 default-debate: FREE-MAD | MAD | MoE | RA-CR
 model-tiers: {scan: cheap, audit: mid, verdict: reasoning}
 ---
@@ -234,3 +234,20 @@ model-tiers: {scan: cheap, audit: mid, verdict: reasoning}
 # Approval Gates (only deviations from protocol §10)
 # RUN PROMPT (verbatim block you paste or invoke)
 ```
+
+Notes on the template:
+
+- `name` must be `loop-<slug>` and `loop-id` must be `LOOP-NN`, both matching the
+  filename `LOOP-NN-<slug>.md`. `name` is how an agent invokes the skill, so a
+  mismatch means the loop installs under a name nobody can call.
+- A `risk-class` may carry a trailing parenthetical scope note —
+  `branch-mutating (loops only)` — but the class before the parenthesis is one of
+  the four above.
+- Section headings may carry a parenthetical, but must begin with the section
+  name and appear in the order listed, so any two loops diff cleanly.
+- Optional `composed-of: [LOOP-NN, ...]` declares which loops a meta-loop
+  orchestrates.
+
+`python tools/validate_loops.py` enforces all of the above, plus README catalog
+coverage and relative links. It is standard library only and runs on a fresh
+clone with no install.

@@ -1,0 +1,26 @@
+name: Validate loops
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    name: Loop contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # No install step on purpose. The validator is standard library only, so
+      # what CI runs is exactly what a contributor runs on a fresh clone.
+      - name: Validate every loop against PROTOCOL.md section 14
+        run: python tools/validate_loops.py

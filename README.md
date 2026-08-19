@@ -23,8 +23,8 @@ Each loop is a complete, runnable audit-and-fix system in one markdown file — 
 ## Table of Contents
 
 - [Quick Start](#quick-start)
-- [The Loop Catalog](#the-loop-catalog)
-- [Meta-Loops — Loops That Run the Other 15](#meta-loops--loops-that-run-the-other-15)
+- [The Loop Catalog](#the-loop-catalog) — the 15 base loops
+- [Meta-Loops — Loops That Run the Other 15](#meta-loops--loops-that-run-the-other-15) — LOOP-16 to LOOP-21
 - [How It Works](#how-it-works)
 - [Installing as a Claude Code Skill](#installing-as-a-claude-code-skill)
 - [Suggested Cadence](#suggested-cadence)
@@ -49,6 +49,10 @@ Three ways to use this repo:
 
 ## The Loop Catalog
 
+The 15 base loops, each auditing one fixed surface. The six that take *other
+loops* as input — LOOP-16 through LOOP-21 — are catalogued in
+[Meta-Loops](#meta-loops--loops-that-run-the-other-15) below.
+
 | # | Loop | Domain | Risk | What it does |
 |---|------|--------|------|---------------|
 | [01](skills/LOOP-01-backend-api.md) | Backend & API Hardening | Backend & API Architecture | branch-mutating | AST-driven audit: OWASP API Top 10 (BOLA/BOPLA/SSRF/auth/resource limits), N+1 queries, dead code, logging hygiene. |
@@ -72,6 +76,15 @@ Three ways to use this repo:
 ## Meta-Loops — Loops That Run the Other 15
 
 LOOP-01 through LOOP-15 each audit one fixed surface. LOOP-16 through LOOP-20 are the five base meta-loops: they take *other loops* — or a plain-language goal — as their input. LOOP-21 is the first integration loop, composing all five into a full merge lifecycle. Notation below: `[NN + NN]` = loops feeding in, `→` = then, `?` = branch point.
+
+| # | Loop | Kind | Risk | Takes as input |
+|---|------|------|------|----------------|
+| [16](skills/LOOP-16-fanout-orchestrator.md) | Fan-Out Orchestrator | meta | branch-mutating | Two or more loops with non-overlapping scope |
+| [17](skills/LOOP-17-sparring-partners.md) | Sparring Partners | meta | branch-mutating | One breaker loop, one builder loop, one artifact |
+| [18](skills/LOOP-18-the-ratchet.md) | The Ratchet | meta | branch-mutating | One loop with a single number or patch to tune |
+| [19](skills/LOOP-19-idea-arena.md) | Idea Arena | meta | read-only | Open findings from any loops, as candidate ideas |
+| [20](skills/LOOP-20-goal-pipeline.md) | Goal Pipeline | meta · **flagship** | read-only→branch | A goal in plain English |
+| [21](skills/LOOP-21-merge-protocol.md) | Merge Protocol | integration | branch-mutating | A pull request, plus the five meta-loops above |
 
 **[LOOP-20 — Goal Pipeline](skills/LOOP-20-goal-pipeline.md) is the one to start with** — the front door. Hand it a goal in plain English and it plans, checks, and dispatches the other 19 for you. Everything below is a tool LOOP-20 already knows how to reach for.
 
@@ -160,7 +173,20 @@ A reasonable starting rhythm — tune it to your team:
 
 ## Contributing
 
-New loops, sharper adversarial personas, better exit criteria — all welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
+New loops, sharper adversarial personas, better exit criteria — all welcome, and
+the best first PR is usually making an existing loop catch something it misses.
+
+Nothing to install. The one command CI runs is the one you run:
+
+```bash
+python tools/validate_loops.py
+```
+
+It checks the frontmatter and section contract from [`PROTOCOL.md`](PROTOCOL.md)
+section 14, catalog coverage, and every relative link in the repo. Full path
+from idea to merged loop — including the safety rules a loop must not weaken —
+in [`CONTRIBUTING.md`](CONTRIBUTING.md). Scoped starting points are labelled
+[`good first issue`](https://github.com/AetherAI3/agentic-loops/labels/good%20first%20issue).
 
 ## License
 
