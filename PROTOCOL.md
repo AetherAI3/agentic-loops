@@ -246,7 +246,9 @@ Notes on the template:
 - Section headings may carry a parenthetical, but must begin with the section
   name and appear in the order listed, so any two loops diff cleanly.
 - Optional `composed-of: [LOOP-NN, ...]` declares which loops a meta-loop
-  orchestrates.
+  orchestrates; optional `coordinates-with: [LOOP-NN, ...]` declares the loops a
+  base loop hands findings to or defers to. Both are checked: a dangling
+  reference is a loop telling an agent to reach for something that is not there.
 
 `python tools/validate_loops.py` enforces all of the above, plus README catalog
 coverage and relative links. It is standard library only and runs on a fresh

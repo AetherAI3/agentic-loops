@@ -242,6 +242,15 @@ def validate_catalog(loops: dict[str, Path], report: Report) -> None:
 
 
 RELATIVE_LINK = re.compile(r"\[[^\]]*\]\((?!https?:|mailto:|#)([^)\s]+)\)")
+ANCHOR_LINK = re.compile(r"\[[^\]]*\]\(#([^)\s]+)\)")
+HEADING = re.compile(r"^#{1,6}\s+(.+?)\s*$", re.MULTILINE)
+
+
+def slugify(heading: str) -> str:
+    """GitHub's heading-anchor rule: lowercase, drop punctuation, spaces to dashes."""
+    text = re.sub(r"[`*_\[\]()]", "", heading).lower()
+    text = re.sub(r"[^\w\s-]", "", text, flags=re.UNICODE)
+    return re.sub(r"\s", "-", text.strip())
 
 
 def validate_relative_links(report: Report) -> None:
@@ -255,30 +264,47 @@ def validate_relative_links(report: Report) -> None:
         if ".github" in path.parts:
             continue
         where = path.relative_to(ROOT).as_posix()
-        for target in RELATIVE_LINK.findall(path.read_text(encoding="utf-8")):
+        text = path.read_text(encoding="utf-8")
+        for target in RELATIVE_LINK.findall(text):
             resolved = (path.parent / target.split("#", 1)[0]).resolve()
             if not resolved.exists():
                 report.fail(where, f"links to `{target}`, which does not exist")
 
+        # Same-page anchors. Renaming a heading silently breaks every table of
+        # contents entry pointing at it, and nothing about that looks wrong in a
+        # diff — the link and the heading are usually far apart in the file.
+        anchors = {slugify(h) for h in HEADING.findall(text)}
+        for target in ANCHOR_LINK.findall(text):
+            if target.lower() not in anchors:
+                report.fail(
+                    where,
+                    f"links to `#{target}`, but no heading in the file has that "
+                    "anchor — a heading was probably renamed",
+                )
+
 
 def validate_composition(fronts: dict[str, dict[str, str]], report: Report) -> None:
-    """`composed-of` may only name loops that exist."""
+    """`composed-of` and `coordinates-with` may only name loops that exist.
+
+    Two different relationships, both worth checking: `composed-of` is a
+    meta-loop declaring the loops it *runs*, `coordinates-with` is a loop
+    declaring the ones it hands findings to. A dangling reference in either is a
+    loop telling an agent to reach for something that is not there.
+    """
     known = set(fronts)
     for loop_id, front in fronts.items():
-        raw = front.get("composed-of")
-        if not raw:
-            continue
-        referenced = re.findall(r"LOOP-\d{2}", raw)
-        if not referenced:
-            report.fail(
-                loop_id,
-                "`composed-of` is set but names no LOOP-NN ids",
-            )
-        for ref in referenced:
-            if ref not in known:
-                report.fail(loop_id, f"`composed-of` names {ref}, which does not exist")
-            if ref == loop_id:
-                report.fail(loop_id, "`composed-of` lists the loop itself")
+        for key in ("composed-of", "coordinates-with"):
+            raw = front.get(key)
+            if not raw:
+                continue
+            referenced = re.findall(r"LOOP-\d{2}", raw)
+            if not referenced:
+                report.fail(loop_id, f"`{key}` is set but names no LOOP-NN ids")
+            for ref in referenced:
+                if ref not in known:
+                    report.fail(loop_id, f"`{key}` names {ref}, which does not exist")
+                if ref == loop_id:
+                    report.fail(loop_id, f"`{key}` lists the loop itself")
 
 
 def main() -> int:

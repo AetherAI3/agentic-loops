@@ -2,7 +2,7 @@
 
 # Agentic Loops
 
-**21 autonomous, self-contained "loop" systems that turn Claude Code (or any AI coding agent) into a full audit-and-fix pipeline — with built-in adversarial review, confidence scoring, and safe rollback.**
+**22 autonomous, self-contained "loop" systems that turn Claude Code (or any AI coding agent) into a full audit-and-fix pipeline — with built-in adversarial review, confidence scoring, and safe rollback.**
 
 [![GitHub stars](https://img.shields.io/github/stars/AetherAI3/agentic-loops?style=social)](https://github.com/AetherAI3/agentic-loops/stargazers)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
@@ -17,14 +17,14 @@
 Each loop is a complete, runnable audit-and-fix system in one markdown file — a mission, an execution DAG, a hostile adversarial reviewer, and quantitative exit criteria, all sharing one contract defined in [`PROTOCOL.md`](PROTOCOL.md).
 
 <p align="center">
-  <img src="docs/loop-cards.svg" alt="The 15 base agentic loops, color-coded by risk class" width="100%">
+  <img src="docs/loop-cards.svg" alt="LOOP-01 to LOOP-15, color-coded by risk class" width="100%">
 </p>
 
 ## Table of Contents
 
 - [Quick Start](#quick-start)
-- [The Loop Catalog](#the-loop-catalog) — the 15 base loops
-- [Meta-Loops — Loops That Run the Other 15](#meta-loops--loops-that-run-the-other-15) — LOOP-16 to LOOP-21
+- [The Loop Catalog](#the-loop-catalog) — the 16 base loops
+- [Meta-Loops — Loops That Run the Catalog](#meta-loops--loops-that-run-the-catalog) — LOOP-16 to LOOP-21
 - [How It Works](#how-it-works)
 - [Installing as a Claude Code Skill](#installing-as-a-claude-code-skill)
 - [Suggested Cadence](#suggested-cadence)
@@ -49,9 +49,9 @@ Three ways to use this repo:
 
 ## The Loop Catalog
 
-The 15 base loops, each auditing one fixed surface. The six that take *other
+The 16 base loops, each auditing one fixed surface. The six that take *other
 loops* as input — LOOP-16 through LOOP-21 — are catalogued in
-[Meta-Loops](#meta-loops--loops-that-run-the-other-15) below.
+[Meta-Loops](#meta-loops--loops-that-run-the-catalog) below.
 
 | # | Loop | Domain | Risk | What it does |
 |---|------|--------|------|---------------|
@@ -70,12 +70,13 @@ loops* as input — LOOP-16 through LOOP-21 — are catalogued in
 | [13](skills/LOOP-13-drift-debt.md) | Architectural Drift & Debt | Continuous Evaluation | read-only | Detects layer violations, circular deps, dead APIs/services; scores technical debt 0–100 across six axes, trended over time. |
 | [14](skills/LOOP-14-governance-telemetry.md) | Governance & Telemetry | Runtime Observability | read-only | Audits the autonomous system itself: is it improving, looping, degrading, wasting tokens, or getting less reliable? |
 | [15](skills/LOOP-15-self-optimization.md) | Self-Optimization Meta-Loop | Continuous Evaluation | branch-mutating (loops only) | The recursive-improvement loop: failure → root cause → fix → generalized pattern → proposed diff to the loops themselves. Human-gated always. |
+| [22](skills/LOOP-22-website-growth-overhaul.md) | Website Growth & Simplification Overhaul | Website Growth, Search Visibility & Generative Discovery | branch-mutating | Evidence-first whole-site overhaul: simplify routes/content/UI, repair technical SEO, validate entity truth, test generative retrieval, and protect accessibility, performance, and conversion. |
 
 **Risk classes:** `read-only` never touches your code · `branch-mutating` works only on an isolated loop branch, never main · `infra-touching` reads live infrastructure and proposes plans, never applies changes without explicit approval. (Same three classes apply to the meta-loops and integration below.)
 
-## Meta-Loops — Loops That Run the Other 15
+## Meta-Loops — Loops That Run the Catalog
 
-LOOP-01 through LOOP-15 each audit one fixed surface. LOOP-16 through LOOP-20 are the five base meta-loops: they take *other loops* — or a plain-language goal — as their input. LOOP-21 is the first integration loop, composing all five into a full merge lifecycle. Notation below: `[NN + NN]` = loops feeding in, `→` = then, `?` = branch point.
+LOOP-01 through LOOP-15 and LOOP-22 each audit one fixed surface. LOOP-16 through LOOP-20 are the five base meta-loops: they take *other loops* — or a plain-language goal — as their input. LOOP-21 is the first integration loop, composing all five into a full merge lifecycle. Notation below: `[NN + NN]` = loops feeding in, `→` = then, `?` = branch point.
 
 | # | Loop | Kind | Risk | Takes as input |
 |---|------|------|------|----------------|
@@ -86,7 +87,7 @@ LOOP-01 through LOOP-15 each audit one fixed surface. LOOP-16 through LOOP-20 ar
 | [20](skills/LOOP-20-goal-pipeline.md) | Goal Pipeline | meta · **flagship** | read-only→branch | A goal in plain English |
 | [21](skills/LOOP-21-merge-protocol.md) | Merge Protocol | integration | branch-mutating | A pull request, plus the five meta-loops above |
 
-**[LOOP-20 — Goal Pipeline](skills/LOOP-20-goal-pipeline.md) is the one to start with** — the front door. Hand it a goal in plain English and it plans, checks, and dispatches the other 19 for you. Everything below is a tool LOOP-20 already knows how to reach for.
+**[LOOP-20 — Goal Pipeline](skills/LOOP-20-goal-pipeline.md) is the one to start with** — the front door. Hand it a goal in plain English and it plans, checks, and dispatches the applicable catalog loops for you. Everything below is a tool LOOP-20 already knows how to reach for.
 
 ---
 
@@ -123,12 +124,12 @@ Diverse candidate ideas, one shared debate-and-mutation arena, one converged ide
 Pairs with: any loops with open findings to seed candidates from + 11 (final gate on the handoff) + 20 (receives it).
 
 **[20 — Goal Pipeline](skills/LOOP-20-goal-pipeline.md)** · `read-only→branch` · **flagship**
-Plain-language goal in, validated dependency-checked plan out, dispatched into whichever of 01–19 fit.
+Plain-language goal in, validated dependency-checked plan out, dispatched into whichever catalog loops fit.
 ```
 20: goal="harden API + dedupe code" → decompose → [01] + [13] independent → 16 fan-out → 11 reviews plan → dispatch
 ```
 *Example: one goal implies two unrelated tasks — LOOP-20 proves they don't conflict, hands both to LOOP-16 to run in parallel instead of you manually sequencing them, and keeps re-checking the plan as results come in.*
-Pairs with: everything — this is the loop that decides which of the other 19 to run.
+Pairs with: everything — this is the loop that decides which other loops to run.
 
 **[21 — Merge Protocol](skills/LOOP-21-merge-protocol.md)** · `branch-mutating` · **integration**
 Anchor the real remote trunk, capture a PR and its goals immutably, adversarially simplify it one verified change at a time, prove CI actually ran, merge only with operator approval, then replay the original contract over the entire integrated trunk and open a scoped follow-up PR for real gaps.
@@ -170,6 +171,7 @@ A reasonable starting rhythm — tune it to your team:
 | Pre-release | 08 (CI/CD), 12 (test/mutation/chaos), 06 (UX/UI) |
 | Monthly deep audit | 07 (infra), 09 (data layer), 10 (AI security), 05 (memory) |
 | Continuous / every N runs | 14 (governance), then 15 (self-optimization) |
+| Relaunch or growth overhaul | 22 (website growth, simplification, SEO/GEO) |
 
 ## Contributing
 

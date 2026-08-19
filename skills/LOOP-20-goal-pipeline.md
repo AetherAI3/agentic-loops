@@ -1,7 +1,7 @@
 ---
 name: loop-goal-pipeline
 loop-id: LOOP-20
-description: The catalog's entry gate — turns a plain-language goal into a validated, cycle-checked task DAG, adversarially reviews the plan, then dispatches it into any combination of LOOP-01..19, re-verifying the DAG continuously as execution proceeds and routing verification failures back to goal clarification instead of running on a broken plan
+description: The catalog's entry gate — turns a plain-language goal into a validated, cycle-checked task DAG, adversarially reviews the plan, then dispatches it into any applicable catalog loops, re-verifying the DAG continuously as execution proceeds and routing verification failures back to goal clarification instead of running on a broken plan
 domain: Goal Intake & Plan Validation — Catalog Entry Gate
 risk-class: read-only→branch
 default-debate: FREE-MAD
@@ -11,9 +11,9 @@ composed-of: [LOOP-11, LOOP-16]
 
 # Mission
 
-Every other loop in this catalog assumes it already knows its target and scope. LOOP-20 is what decides that — the front door a plain-language goal walks through before any of LOOP-01 through LOOP-19 ever runs. A goal enters, gets validated for clarity and scope, decomposed into a task graph, checked for cycles and contradictions, adversarially reviewed, and only THEN dispatched — as one loop or, via LOOP-16's fan-out orchestrator, several independent loops running in parallel. Two properties separate this from a simple task-router: **the DAG is re-verified continuously as execution proceeds, not just once at intake** (a downstream loop's finding can invalidate an assumption the plan was built on — LOOP-20 catches that instead of letting execution drift silently out of sync with the plan), and **a verification failure routes back to goal clarification, not into a bad execution** (a cyclic or contradictory task graph means the goal itself was under-specified, and the fix belongs at the goal layer, not patched over in the DAG).
+Every other loop in this catalog assumes it already knows its target and scope. LOOP-20 is what decides that — the front door a plain-language goal walks through before a catalog loop runs. A goal enters, gets validated for clarity and scope, decomposed into a task graph, checked for cycles and contradictions, adversarially reviewed, and only THEN dispatched — as one loop or, via LOOP-16's fan-out orchestrator, several independent loops running in parallel. Two properties separate this from a simple task-router: **the DAG is re-verified continuously as execution proceeds, not just once at intake** (a downstream loop's finding can invalidate an assumption the plan was built on — LOOP-20 catches that instead of letting execution drift silently out of sync with the plan), and **a verification failure routes back to goal clarification, not into a bad execution** (a cyclic or contradictory task graph means the goal itself was under-specified, and the fix belongs at the goal layer, not patched over in the DAG).
 
-Without this loop, the other 19 are individually excellent but the operator has to manually decide "which loop, what scope, in what order" every time — and nothing catches a goal that implies a plan with a hidden circular dependency (e.g. "harden the API and also don't change any endpoint contracts the API hardening pass would need to change") until it's halfway executed. LOOP-20 is that missing layer: a validated goal produces a validated plan, and the plan's own execution keeps proving itself valid as it runs.
+Without this loop, the other catalog loops are individually excellent but the operator has to manually decide "which loop, what scope, in what order" every time — and nothing catches a goal that implies a plan with a hidden circular dependency (e.g. "harden the API and also don't change any endpoint contracts the API hardening pass would need to change") until it's halfway executed. LOOP-20 is that missing layer: a validated goal produces a validated plan, and the plan's own execution keeps proving itself valid as it runs.
 
 # Trigger
 
@@ -33,7 +33,7 @@ Without this loop, the other 19 are individually excellent but the operator has 
 # Preconditions
 
 - [PROTOCOL] read.
-- The target catalog (this repo's `skills/LOOP-01..19-*.md`) readable, so node 2 can match goal-implied work to real loop capabilities rather than inventing dispatch targets that don't exist.
+- The target catalog (this repo's `skills/LOOP-*.md`) readable, so node 2 can match goal-implied work to real loop capabilities rather than inventing dispatch targets that don't exist.
 - Loop branch created before node 7 (dispatch) — nodes 1–6 are read-only planning; nothing mutates until a validated, adversarially-reviewed plan exists.
 
 # Execution DAG (numbered nodes, [P] = parallelizable)
@@ -58,7 +58,7 @@ Failure conditions: goal passes the clarity bar but the target doesn't exist/isn
 Output artifact: `node-1-goal-validation.md` (pass/fail + specific gaps if fail).
 
 **Node 2 — Task decomposition.**
-Action: break the validated goal into discrete tasks. For each task, match it against this catalog's real loop descriptions (`skills/LOOP-01..19-*.md`) — a task like "audit the backend for OWASP issues" maps to LOOP-01, "close test coverage gaps" maps to LOOP-12, "tune this one retry threshold" maps to LOOP-18, etc. A task with no reasonable match is NOT force-fit; it's marked `novel` for node 4.
+Action: break the validated goal into discrete tasks. For each task, match it against this catalog's real loop descriptions (`skills/LOOP-*.md`) — a task like "audit the backend for OWASP issues" maps to LOOP-01, "close test coverage gaps" maps to LOOP-12, "overhaul website SEO/GEO and simplify the public experience" maps to LOOP-22, and "tune this one retry threshold" maps to LOOP-18. A task with no reasonable match is NOT force-fit; it's marked `novel` for node 4.
 Tools: Read (catalog descriptions), reasoning tier for the matching judgment.
 Failure conditions: goal decomposes into zero tasks (too abstract despite passing node 1) → route to node 8 (back to node 1) rather than proceeding with an empty plan.
 Output artifact: `node-2-task-decomposition.md` — task table: `task | matched loop (or novel) | rationale`.

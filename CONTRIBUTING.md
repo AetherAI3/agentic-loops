@@ -61,7 +61,9 @@ model-tiers: {scan: cheap, audit: mid, verdict: reasoning}
 A risk class may carry a scope note in parentheses — `branch-mutating (loops
 only)` — but the class before the parenthesis has to be one of the four.
 An optional `composed-of: [LOOP-NN, ...]` key declares which loops a meta-loop
-orchestrates; the validator checks that every id it names exists.
+orchestrates, and `coordinates-with: [LOOP-NN, ...]` declares the loops a base
+loop hands findings to or defers to. The validator checks that every id either
+one names exists.
 
 **Sections.** Eleven `#` headings, in this order:
 
