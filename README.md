@@ -4,9 +4,9 @@
 
 **21 autonomous, self-contained "loop" systems that turn Claude Code (or any AI coding agent) into a full audit-and-fix pipeline — with built-in adversarial review, confidence scoring, and safe rollback.**
 
-[![GitHub stars](https://img.shields.io/github/stars/DBarr3/agentic-loops?style=social)](https://github.com/DBarr3/agentic-loops/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/AetherAI3/agentic-loops?style=social)](https://github.com/AetherAI3/agentic-loops/stargazers)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Made by Aether AI](https://img.shields.io/badge/made%20by-Aether%20AI-6f42c1?style=flat-square)](https://github.com/DBarr3)
+[![Made by Aether AI](https://img.shields.io/badge/made%20by-Aether%20AI-6f42c1?style=flat-square)](https://github.com/AetherAI3)
 [![Claude Code Compatible](https://img.shields.io/badge/Claude%20Code-compatible-CC785C?style=flat-square)](https://claude.com/claude-code)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
@@ -196,6 +196,6 @@ in [`CONTRIBUTING.md`](CONTRIBUTING.md). Scoped starting points are labelled
 
 <div align="center">
 
-Built by **[Aether AI](https://github.com/DBarr3)**
+Built by **[Aether AI](https://github.com/AetherAI3)**
 
 </div>
