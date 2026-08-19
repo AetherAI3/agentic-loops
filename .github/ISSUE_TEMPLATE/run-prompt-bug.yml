@@ -1,0 +1,72 @@
+name: A loop did not work as written
+description: A RUN PROMPT failed, stalled, or did something the loop file does not describe.
+title: "[LOOP-NN]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Loops are prompts, so "it did not work" depends heavily on which agent
+        ran it. The agent and the point it broke are the two things that make
+        this reproducible.
+
+  - type: input
+    id: loop
+    attributes:
+      label: Which loop
+      description: The loop id and file.
+      placeholder: LOOP-01 (skills/LOOP-01-backend-api.md)
+    validations:
+      required: true
+
+  - type: input
+    id: agent
+    attributes:
+      label: Which agent, and which model
+      description: The coding agent you pasted the RUN PROMPT into.
+      placeholder: Claude Code, Opus 4.6
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What the loop file says should happen
+      description: Quote the node, exit criterion, or gate you were relying on.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened
+      description: >
+        Where it diverged. If the agent stopped at a node, name the node number.
+        Trim transcripts to the decisive part.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Did it stay inside its risk class?
+      description: >
+        A read-only loop that wrote files, or a branch-mutating loop that touched
+        the default branch, is a safety bug and jumps the queue.
+      options:
+        - "Yes - it stayed inside its declared risk class"
+        - "No - it exceeded its risk class"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Target shape
+      description: >
+        Language, framework, and rough size of the repo you pointed it at. No
+        need for a name or a link - a loop that only works on one stack is the
+        bug we are looking for.
+    validations:
+      required: false

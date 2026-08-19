@@ -1,0 +1,94 @@
+name: Propose a new loop
+description: Propose a new LOOP-NN for a surface the catalog does not audit yet.
+title: "[new loop]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A loop is one complete audit-and-fix system in one markdown file. Before
+        proposing one, check whether the surface is already covered by an
+        existing loop - sharpening an existing loop is usually the better change.
+
+        The contract is [PROTOCOL.md](https://github.com/AetherAI3/agentic-loops/blob/master/PROTOCOL.md)
+        section 14, and `python tools/validate_loops.py` checks it locally.
+
+  - type: input
+    id: domain
+    attributes:
+      label: Domain
+      description: The surface this loop audits, in the same register as the existing domains.
+      placeholder: Data Architecture & Persistence
+    validations:
+      required: true
+
+  - type: textarea
+    id: gap
+    attributes:
+      label: What does the catalog miss today?
+      description: >
+        Name the bug class that no current loop would find. If an existing loop
+        is close, say which, and why extending it is worse than a new loop.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk class
+      description: PROTOCOL.md section 6. Pick the least invasive class that can still do the job.
+      options:
+        - read-only
+        - read-only to branch (opens a branch only after a gate)
+        - branch-mutating
+        - infra-touching
+    validations:
+      required: true
+
+  - type: textarea
+    id: dag
+    attributes:
+      label: Sketch the Execution DAG
+      description: Numbered nodes, with the parallelizable ones marked.
+      placeholder: |
+        1. Scope capture
+        2. [P] Static scan
+        3. [P] Runtime probe
+        4. Findings merge
+        5. Adversarial verification + AUDIT-ARTIFACT
+    validations:
+      required: true
+
+  - type: textarea
+    id: adversary
+    attributes:
+      label: Who is the hostile reviewer?
+      description: >
+        Every loop has an adversarial persona whose job is to break the loop's
+        own findings. A vague adversary is the most common reason a loop reports
+        confident nonsense. Name the persona and what it attacks.
+      placeholder: >
+        A platform SRE who assumes every green check is a check that never ran,
+        and demands the run id and timestamp for each one.
+    validations:
+      required: true
+
+  - type: textarea
+    id: exit
+    attributes:
+      label: Quantitative exit criteria
+      description: >
+        Numbers, not adjectives. PROTOCOL.md section 12 - a FAIL with an artifact
+        beats a silent success.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before you open this
+      options:
+        - label: This loop would run on any repo with no edits beyond the target.
+          required: true
+        - label: I have read PROTOCOL.md section 14 and can fill in every section.
+          required: true
