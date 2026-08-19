@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Read the loop contract first
+    url: https://github.com/AetherAI3/agentic-loops/blob/master/PROTOCOL.md
+    about: Every loop shares one execution protocol. Section 14 is the file template.
+  - name: How to contribute a loop
+    url: https://github.com/AetherAI3/agentic-loops/blob/master/CONTRIBUTING.md
+    about: The full path from idea to merged loop, including the local validator.

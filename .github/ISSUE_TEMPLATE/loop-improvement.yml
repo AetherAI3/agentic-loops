@@ -1,0 +1,59 @@
+name: Improve an existing loop
+description: Tighten an exit criterion, add a missed bug class, or sharpen an adversarial persona.
+title: "[LOOP-NN]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the highest-value contribution to the catalog and the easiest one
+        to start with. A loop improves when a real failure mode motivated it.
+
+  - type: input
+    id: loop
+    attributes:
+      label: Which loop
+      placeholder: LOOP-10 (skills/LOOP-10-ai-security.md)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of change
+      options:
+        - Missed bug class - the loop should look for something it does not
+        - Weak exit criteria - the loop can pass while the problem is still there
+        - Soft adversary - the reviewer persona accepts findings it should attack
+        - Failure routing - a failure lands in the wrong class or dead-ends
+        - Portability - the loop assumes a stack, tool, or layout not everyone has
+        - Wording - the RUN PROMPT is ambiguous enough that agents diverge
+    validations:
+      required: true
+
+  - type: textarea
+    id: failure
+    attributes:
+      label: What failure mode motivated this?
+      description: >
+        The concrete thing that got through, or the false positive that wasted a
+        review. "It would be better if" without a failure behind it is hard to
+        act on and harder to test.
+    validations:
+      required: true
+
+  - type: textarea
+    id: change
+    attributes:
+      label: Proposed change
+      description: Which node, criterion, or persona line changes, and to what.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before you open this
+      options:
+        - label: The change keeps the loop inside its declared risk class, or the issue says why the class should change.
+          required: true

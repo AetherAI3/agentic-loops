@@ -4,9 +4,9 @@
 
 **22 autonomous, self-contained "loop" systems that turn Claude Code (or any AI coding agent) into a full audit-and-fix pipeline — with built-in adversarial review, confidence scoring, and safe rollback.**
 
-[![GitHub stars](https://img.shields.io/github/stars/DBarr3/agentic-loops?style=social)](https://github.com/DBarr3/agentic-loops/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/AetherAI3/agentic-loops?style=social)](https://github.com/AetherAI3/agentic-loops/stargazers)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Made by Aether AI](https://img.shields.io/badge/made%20by-Aether%20AI-6f42c1?style=flat-square)](https://github.com/DBarr3)
+[![Made by Aether AI](https://img.shields.io/badge/made%20by-Aether%20AI-6f42c1?style=flat-square)](https://github.com/AetherAI3)
 [![Claude Code Compatible](https://img.shields.io/badge/Claude%20Code-compatible-CC785C?style=flat-square)](https://claude.com/claude-code)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 
@@ -17,14 +17,14 @@
 Each loop is a complete, runnable audit-and-fix system in one markdown file — a mission, an execution DAG, a hostile adversarial reviewer, and quantitative exit criteria, all sharing one contract defined in [`PROTOCOL.md`](PROTOCOL.md).
 
 <p align="center">
-  <img src="docs/loop-cards.svg" alt="The 15 base agentic loops, color-coded by risk class" width="100%">
+  <img src="docs/loop-cards.svg" alt="LOOP-01 to LOOP-15, color-coded by risk class" width="100%">
 </p>
 
 ## Table of Contents
 
 - [Quick Start](#quick-start)
-- [The Loop Catalog](#the-loop-catalog)
-- [Meta-Loops — Loops That Run the Catalog](#meta-loops--loops-that-run-the-catalog)
+- [The Loop Catalog](#the-loop-catalog) — the 16 base loops
+- [Meta-Loops — Loops That Run the Catalog](#meta-loops--loops-that-run-the-catalog) — LOOP-16 to LOOP-21
 - [How It Works](#how-it-works)
 - [Installing as a Claude Code Skill](#installing-as-a-claude-code-skill)
 - [Suggested Cadence](#suggested-cadence)
@@ -48,6 +48,10 @@ Three ways to use this repo:
 3. **Clone the whole set** — `git clone` this repo and point your agent at the `skills/` folder for the full catalog.
 
 ## The Loop Catalog
+
+The 16 base loops, each auditing one fixed surface. The six that take *other
+loops* as input — LOOP-16 through LOOP-21 — are catalogued in
+[Meta-Loops](#meta-loops--loops-that-run-the-catalog) below.
 
 | # | Loop | Domain | Risk | What it does |
 |---|------|--------|------|---------------|
@@ -73,6 +77,15 @@ Three ways to use this repo:
 ## Meta-Loops — Loops That Run the Catalog
 
 LOOP-01 through LOOP-15 and LOOP-22 each audit one fixed surface. LOOP-16 through LOOP-20 are the five base meta-loops: they take *other loops* — or a plain-language goal — as their input. LOOP-21 is the first integration loop, composing all five into a full merge lifecycle. Notation below: `[NN + NN]` = loops feeding in, `→` = then, `?` = branch point.
+
+| # | Loop | Kind | Risk | Takes as input |
+|---|------|------|------|----------------|
+| [16](skills/LOOP-16-fanout-orchestrator.md) | Fan-Out Orchestrator | meta | branch-mutating | Two or more loops with non-overlapping scope |
+| [17](skills/LOOP-17-sparring-partners.md) | Sparring Partners | meta | branch-mutating | One breaker loop, one builder loop, one artifact |
+| [18](skills/LOOP-18-the-ratchet.md) | The Ratchet | meta | branch-mutating | One loop with a single number or patch to tune |
+| [19](skills/LOOP-19-idea-arena.md) | Idea Arena | meta | read-only | Open findings from any loops, as candidate ideas |
+| [20](skills/LOOP-20-goal-pipeline.md) | Goal Pipeline | meta · **flagship** | read-only→branch | A goal in plain English |
+| [21](skills/LOOP-21-merge-protocol.md) | Merge Protocol | integration | branch-mutating | A pull request, plus the five meta-loops above |
 
 **[LOOP-20 — Goal Pipeline](skills/LOOP-20-goal-pipeline.md) is the one to start with** — the front door. Hand it a goal in plain English and it plans, checks, and dispatches the applicable catalog loops for you. Everything below is a tool LOOP-20 already knows how to reach for.
 
@@ -162,7 +175,20 @@ A reasonable starting rhythm — tune it to your team:
 
 ## Contributing
 
-New loops, sharper adversarial personas, better exit criteria — all welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
+New loops, sharper adversarial personas, better exit criteria — all welcome, and
+the best first PR is usually making an existing loop catch something it misses.
+
+Nothing to install. The one command CI runs is the one you run:
+
+```bash
+python tools/validate_loops.py
+```
+
+It checks the frontmatter and section contract from [`PROTOCOL.md`](PROTOCOL.md)
+section 14, catalog coverage, and every relative link in the repo. Full path
+from idea to merged loop — including the safety rules a loop must not weaken —
+in [`CONTRIBUTING.md`](CONTRIBUTING.md). Scoped starting points are labelled
+[`good first issue`](https://github.com/AetherAI3/agentic-loops/labels/good%20first%20issue).
 
 ## License
 
@@ -172,6 +198,6 @@ New loops, sharper adversarial personas, better exit criteria — all welcome. S
 
 <div align="center">
 
-Built by **[Aether AI](https://github.com/DBarr3)**
+Built by **[Aether AI](https://github.com/AetherAI3)**
 
 </div>
